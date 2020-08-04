@@ -4,48 +4,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Mover : MonoBehaviour
+namespace RPG.Movement
 {
 
-    [SerializeField] Transform target;
-
-    int rayLength = 100;
-
-    NavMeshAgent navMeshAgent;
-
-
-    void Start()
+    public class Mover : MonoBehaviour
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
-    }
+
+        [SerializeField] Transform target;
+
+        int rayLength = 100;
+
+        NavMeshAgent navMeshAgent;
 
 
-    void Update()
-    {
-        if(Input.GetMouseButton(0))
+        void Start()
         {
-            MoveToCursor();
+            navMeshAgent = GetComponent<NavMeshAgent>();
         }
-        UpdateAnimator();
-    }
 
-    private void MoveToCursor()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        bool hasHit = Physics.Raycast(ray, out hit);
-        if(hasHit)
+
+        void Update()
         {
-            navMeshAgent.destination = hit.point;
+            UpdateAnimator();
+        }
+
+        public void MoveTo(Vector3 destination)
+        {
+            navMeshAgent.destination = destination;
+        }
+
+        private void UpdateAnimator()
+        {
+            Vector3 velocity = navMeshAgent.velocity;
+            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+            float speed = localVelocity.z;
+            GetComponent<Animator>().SetFloat("forwardSpeed", speed);
+            print("velocity = " + velocity.ToString() + " : localVelocity = " + localVelocity.ToString() + " : speed = " + speed); //TODO Delete
         }
     }
 
-    private void UpdateAnimator()
-    {
-        Vector3 velocity = navMeshAgent.velocity;
-        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
-        float speed = localVelocity.z;
-        GetComponent<Animator>().SetFloat("forwardSpeed", speed);
-        print("velocity = " + velocity.ToString() + " : localVelocity = " + localVelocity.ToString() + " : speed = " + speed); //TODO Delete
-    }
 }
