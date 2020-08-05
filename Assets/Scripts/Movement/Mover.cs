@@ -39,7 +39,6 @@ namespace RPG.Movement
             Vector3 localVelocity = transform.InverseTransformDirection(velocity);
             float speed = localVelocity.z;
             GetComponent<Animator>().SetFloat("forwardSpeed", speed);
-            print("velocity = " + velocity.ToString() + " : localVelocity = " + localVelocity.ToString() + " : speed = " + speed); //TODO Delete
         }
     }
 
